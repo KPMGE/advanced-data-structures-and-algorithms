@@ -1,4 +1,4 @@
-NAME_PROGRAM   = josephus.exe
+NAME_PROGRAM   = dijkstra.exe
 MAIN_FILE_NAME = main
 SRC            = ./src
 INCLUDE        = ./include
