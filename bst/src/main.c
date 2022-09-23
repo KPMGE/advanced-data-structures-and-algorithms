@@ -49,6 +49,9 @@ int main(int argc, char *argv[]) {
 	bst_rec_post_order(root, display_node);
 	printf("\n");
 
+  printf("iter_in_order:\n");
+	bst_iter_in_order(root, display_node);
+	printf("\n");
 
   printf("mean height: %d\n", calc_mean(root));
   printf("minimum height: %d\n", min_height(AMOUNT_NODES));
