@@ -4,72 +4,41 @@
 
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 
-typedef struct node {
-  int value;
-  struct node *left;
-  struct node *right;
-} Node;
-
-static Node *node_new(int v) {
-  Node *n = malloc(sizeof(Node));
-  n->left = n->right = NULL;
-  n->value = v;
-  return n;
-}
-
-static Node *node_add(Node *n, int v) {
-  if (!n)
-    return node_new(v);
-  if (n->value < v)
-    n->left = node_add(n->left, v);
-  if (n->value > v)
-    n->right = node_add(n->right, v);
-  return n;
-}
-
-static void display(Node *n) {
-  if (!n) {
-    return;
-  }
-  printf("%d\n", n->value);
-  display(n->left);
-  display(n->right);
-}
-
-static void free_nodes(Node *n) {
-  if (n) {
-    free_nodes(n->left);
-    free_nodes(n->right);
-    free(n);
-  }
-}
-
-static int height(Node *n) {
-  if (!n)
-    return -1;
-  int left_height = height(n->left);
-  int right_height = height(n->right);
-  return MAX(left_height, right_height) + 1;
-}
-
 struct bst {
-  Node *root;
+  int value;
+  Bst *left;
+  Bst *right;
 };
 
-Bst *bst_new() {
+Bst *bst_new(int v) {
   Bst *b = malloc(sizeof(Bst));
-  b->root = NULL;
+  b->left = b->right = NULL;
+  b->value = v;
   return b;
 }
 
-void bst_add(Bst *b, int v) { b->root = node_add(b->root, v); }
-
-void bst_free(Bst *b) {
-  free_nodes(b->root);
-  free(b);
+Bst *bst_add(Bst *b, int v) {
+  if (!b)
+    return bst_new(v);
+  if (b->value < v)
+    b->left = bst_add(b->left, v);
+  if (b->value > v)
+    b->right = bst_add(b->right, v);
+  return b;
 }
 
-// Find height of a tree, defined by the root node
-int bst_height(Bst *b) { return height(b->root); }
+void bst_free(Bst *b) {
+  if (b) {
+    bst_free(b->left);
+    bst_free(b->right);
+    free(b);
+  }
+}
 
-void bst_display(Bst *b) { display(b->root); }
+int bst_height(Bst *b) {
+  if (!b)
+    return -1;
+  int left_height = bst_height(b->left);
+  int right_height = bst_height(b->right);
+  return MAX(left_height, right_height) + 1;
+}
