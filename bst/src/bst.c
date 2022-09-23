@@ -46,7 +46,7 @@ static void free_nodes(Node *n) {
 
 static int height(Node *n) {
   if (!n)
-    return 0;
+    return -1;
   int left_height = height(n->left);
   int right_height = height(n->right);
   return MAX(left_height, right_height) + 1;
