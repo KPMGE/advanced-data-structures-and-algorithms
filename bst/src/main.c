@@ -1,6 +1,7 @@
 // NOTE: fix recursive difference between iterative and recursive approaches
 
 #include "../include/bst.h"
+#include "../include/queue.h"
 #include "../include/stack.h"
 #include <math.h>
 #include <stdio.h>
@@ -18,16 +19,6 @@ int min_height(int n);
 void display_node(Bst *b);
 void do_nothing(Bst *b);
 void time_execution(Bst *r, traverse_fn tr_fn, visit_fn vs_fn, char *message);
-
-void time_execution(Bst *r, traverse_fn tr_fn, visit_fn vs_fn, char *message) {
-  printf("%s", message);
-  clock_t start = clock();
-  tr_fn(r, vs_fn);
-  clock_t end = clock();
-
-  double seconds = ((double)end - start) / CLOCKS_PER_SEC;
-  printf("\ntook: %.5lf seconds\n\n", seconds);
-}
 
 int main(int argc, char *argv[]) {
   srand(time(NULL));
@@ -52,8 +43,12 @@ int main(int argc, char *argv[]) {
   time_execution(root, bst_iter_post_order, do_nothing, "iter_post_order: ");
   printf("\n");
 
+  printf("========= Level order traversal =========\n");
+  time_execution(root, level_order_traversal, do_nothing,
+                 "level_order_traversal: ");
+
   // === Mean and min height ===
-  printf("========= Mean & Min Height =========\n");
+  printf("\n\n========= Mean & Min Height =========\n");
   printf("mean height: %d\n", calc_mean(root));
   printf("minimum height: %d\n", min_height(AMOUNT_NODES));
 
@@ -81,3 +76,13 @@ int min_height(int n) { return floor(log2(n)); }
 void display_node(Bst *b) { printf("%d ", bst_get_value(b)); }
 
 void do_nothing(Bst *b) { return; }
+
+void time_execution(Bst *r, traverse_fn tr_fn, visit_fn vs_fn, char *message) {
+  printf("%s", message);
+  clock_t start = clock();
+  tr_fn(r, vs_fn);
+  clock_t end = clock();
+
+  double seconds = ((double)end - start) / CLOCKS_PER_SEC;
+  printf("\ntook: %.5lf seconds\n\n", seconds);
+}

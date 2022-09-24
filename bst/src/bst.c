@@ -1,4 +1,5 @@
 #include "../include/bst.h"
+#include "../include/queue.h"
 #include "../include/stack.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -128,4 +129,22 @@ void bst_iter_post_order(Bst *b, visit_fn fn) {
   }
 
   stack_free(s);
+}
+
+void level_order_traversal(Bst *b, visit_fn fn) {
+  Queue *q = queue_new();
+
+  while (b) {
+    fn(b);
+
+    if (b->left) {
+      enqueue(q, b->left);
+    }
+
+    if (b->right) {
+      enqueue(q, b->right);
+    }
+
+    b = dequeue(q);
+  }
 }

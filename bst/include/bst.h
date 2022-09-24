@@ -15,6 +15,7 @@ void bst_rec_post_order(Bst *b, visit_fn fn);
 void bst_iter_in_order(Bst *b, visit_fn fn);
 void bst_iter_pre_order(Bst *b, visit_fn fn);
 void bst_iter_post_order(Bst *b, visit_fn fn);
+void level_order_traversal(Bst *b, visit_fn fn);
 int bst_get_value(Bst *b);
 
 #endif // !BST_H

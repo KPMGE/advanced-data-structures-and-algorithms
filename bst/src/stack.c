@@ -10,7 +10,7 @@ struct stack {
   Node *head;
 };
 
-Node *node_new(Bst *data) {
+static Node *node_new(Bst *data) {
   Node *n = malloc(sizeof(Node));
   n->data = data;
   n->next = NULL;
