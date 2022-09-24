@@ -7,7 +7,58 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define AMOUNT_NODES 10
+#define AMOUNT_NODES (int)1e7
+
+typedef void (*traverse_fn)(Bst *b, visit_fn fn);
+
+int get_rand_value();
+void fill_bst(Bst **b, int n);
+int calc_mean(Bst *b);
+int min_height(int n);
+void display_node(Bst *b);
+void do_nothing(Bst *b);
+void time_execution(Bst *r, traverse_fn tr_fn, visit_fn vs_fn, char *message);
+
+void time_execution(Bst *r, traverse_fn tr_fn, visit_fn vs_fn, char *message) {
+  printf("%s", message);
+  clock_t start = clock();
+  tr_fn(r, vs_fn);
+  clock_t end = clock();
+
+  double seconds = ((double)end - start) / CLOCKS_PER_SEC;
+  printf("\ntook: %.5lf seconds\n\n", seconds);
+}
+
+int main(int argc, char *argv[]) {
+  srand(time(NULL));
+
+  // create the root with a random value
+  Bst *root = bst_new(get_rand_value());
+  fill_bst(&root, AMOUNT_NODES);
+
+  printf("amount nodes: %d\n\n", AMOUNT_NODES);
+
+  // === Recursive ==
+  printf("========= Recursive =========\n");
+  time_execution(root, bst_rec_in_order, do_nothing, "rec_in_order: ");
+  time_execution(root, bst_rec_pre_order, do_nothing, "rec_pre_order: ");
+  time_execution(root, bst_rec_post_order, do_nothing, "rec_post_order: ");
+  printf("\n");
+
+  // === Iterative ==
+  printf("========= Iterative =========\n");
+  time_execution(root, bst_iter_in_order, do_nothing, "bst_iter_post_order");
+  time_execution(root, bst_iter_pre_order, do_nothing, "iter_pre_order: ");
+  time_execution(root, bst_iter_post_order, do_nothing, "iter_post_order: ");
+  printf("\n");
+
+  // === Mean and min height ===
+  printf("========= Mean & Min Height =========\n");
+  printf("mean height: %d\n", calc_mean(root));
+  printf("minimum height: %d\n", min_height(AMOUNT_NODES));
+
+  bst_free(root);
+}
 
 int get_rand_value() { return rand() % (AMOUNT_NODES + 1); }
 
@@ -29,42 +80,4 @@ int min_height(int n) { return floor(log2(n)); }
 
 void display_node(Bst *b) { printf("%d ", bst_get_value(b)); }
 
-int main(int argc, char *argv[]) {
-  srand(time(NULL));
-
-  Bst *root = bst_new(get_rand_value());
-
-  fill_bst(&root, AMOUNT_NODES);
-
-  // === Recursive ==
-  printf("rec_in_order: ");
-  bst_rec_in_order(root, display_node);
-  printf("\n");
-
-  printf("rec_pre_order: ");
-  bst_rec_pre_order(root, display_node);
-  printf("\n");
-
-  printf("rec_post_order: ");
-  bst_rec_post_order(root, display_node);
-  printf("\n\n");
-
-  // === Iterative ==
-  printf("iter_in_order: ");
-  bst_iter_in_order(root, display_node);
-  printf("\n");
-
-  printf("iter_pre_order: ");
-  bst_iter_pre_order(root, display_node);
-  printf("\n");
-
-  printf("iter_post_order: ");
-  bst_iter_post_order(root, display_node);
-  printf("\n\n");
-
-  // === Mean and min height ===
-  printf("mean height: %d\n", calc_mean(root));
-  printf("minimum height: %d\n", min_height(AMOUNT_NODES));
-
-  bst_free(root);
-}
+void do_nothing(Bst *b) { return; }

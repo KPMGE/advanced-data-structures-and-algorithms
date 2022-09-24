@@ -1,4 +1,4 @@
-NAME_PROGRAM   = name_program.exe
+NAME_PROGRAM   = bst.exe
 MAIN_FILE_NAME = main
 SRC            = ./src
 INCLUDE        = ./include

@@ -88,7 +88,7 @@ void bst_iter_pre_order(Bst *b, visit_fn fn) {
     }
   }
 
-  stack_free(s);
+  // stack_free(s);
 }
 
 void bst_iter_in_order(Bst *b, visit_fn fn) {
