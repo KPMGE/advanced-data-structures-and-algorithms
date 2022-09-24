@@ -40,7 +40,7 @@ bool stack_is_empty(Stack *s) { return !s->head; }
 Bst *stack_peek(Stack *s) { return s->head->data; }
 
 Bst *stack_pop(Stack *s) {
-  if (!s || !s->head)
+  if (!s || stack_is_empty(s))
     return NULL;
 
   Node *aux = s->head;

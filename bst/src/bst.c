@@ -50,8 +50,8 @@ void bst_rec_pre_order(Bst *b, visit_fn fn) {
   if (!b)
     return;
   fn(b);
-  bst_rec_in_order(b->left, fn);
-  bst_rec_in_order(b->right, fn);
+  bst_rec_pre_order(b->left, fn);
+  bst_rec_pre_order(b->right, fn);
 }
 
 void bst_rec_in_order(Bst *b, visit_fn fn) {
@@ -65,8 +65,8 @@ void bst_rec_in_order(Bst *b, visit_fn fn) {
 void bst_rec_post_order(Bst *b, visit_fn fn) {
   if (!b)
     return;
-  bst_rec_in_order(b->left, fn);
-  bst_rec_in_order(b->right, fn);
+  bst_rec_post_order(b->left, fn);
+  bst_rec_post_order(b->right, fn);
   fn(b);
 }
 
