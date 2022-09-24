@@ -18,16 +18,14 @@ Bst *bst_new(int v) {
   return b;
 }
 
-int bst_get_value(Bst *b) {
-  return b->value;
-}
+int bst_get_value(Bst *b) { return b->value; }
 
 Bst *bst_add(Bst *b, int v) {
   if (!b)
     return bst_new(v);
-  if (b->value < v)
+  if (v < b->value)
     b->left = bst_add(b->left, v);
-  if (b->value > v)
+  if (v > b->value)
     b->right = bst_add(b->right, v);
   return b;
 }
@@ -48,63 +46,86 @@ int bst_height(Bst *b) {
   return MAX(left_height, right_height) + 1;
 }
 
-void bst_rec_in_order(Bst *b, visit_fn fn) {
-	if (!b) return;
-	bst_rec_in_order(b->left, fn);
-	fn(b);
-	bst_rec_in_order(b->right, fn);
+void bst_rec_pre_order(Bst *b, visit_fn fn) {
+  if (!b)
+    return;
+  fn(b);
+  bst_rec_in_order(b->left, fn);
+  bst_rec_in_order(b->right, fn);
 }
 
-void bst_rec_pre_order(Bst *b, visit_fn fn) {
-	if (!b) return;
-	fn(b);
-	bst_rec_in_order(b->left, fn);
-	bst_rec_in_order(b->right, fn);
+void bst_rec_in_order(Bst *b, visit_fn fn) {
+  if (!b)
+    return;
+  bst_rec_in_order(b->left, fn);
+  fn(b);
+  bst_rec_in_order(b->right, fn);
 }
 
 void bst_rec_post_order(Bst *b, visit_fn fn) {
-	if (!b) return;
-	bst_rec_in_order(b->left, fn);
-	bst_rec_in_order(b->right, fn);
-	fn(b);
+  if (!b)
+    return;
+  bst_rec_in_order(b->left, fn);
+  bst_rec_in_order(b->right, fn);
+  fn(b);
 }
 
-// procedure iterativePreorder(node)
-//     if node = null
-//         return
-//     stack ← empty stack
-//     stack.push(node)
-//     while not stack.isEmpty()
-//         node ← stack.pop()
-//         visit(node)
-//         // right child is pushed first so that left is processed first
-//         if node.right ≠ null
-//             stack.push(node.right)
-//         if node.left ≠ null
-//             stack.push(node.left
-
-void bst_iter_in_order(Bst *b, visit_fn fn) {
-  if (!b) return;
+void bst_iter_pre_order(Bst *b, visit_fn fn) {
+  if (!b)
+    return;
 
   Stack *s = stack_new();
   stack_push(s, b);
 
   while (!stack_is_empty(s)) {
-    Bst *node = stack_get_tree(stack_pop(s));
-    fn(node);
-    if (node->right) {
-      stack_push(s, node->right);
+    b = stack_pop(s);
+    fn(b);
+    if (b->right) {
+      stack_push(s, b->right);
     }
-    if (node->left) {
-      stack_push(s, node->left);
+    if (b->left) {
+      stack_push(s, b->left);
     }
   }
+
+  stack_free(s);
 }
 
-void bst_iter_pre_order(Bst *b, visit_fn fn) {
-  printf("NOT IMPLEMENTED: bst_iter_pre_order");
+void bst_iter_in_order(Bst *b, visit_fn fn) {
+  Stack *s = stack_new();
+
+  while (!stack_is_empty(s) || b) {
+    if (b) {
+      stack_push(s, b);
+      b = b->left;
+    } else {
+      b = stack_pop(s);
+      fn(b);
+      b = b->right;
+    }
+  }
+
+  stack_free(s);
 }
 
 void bst_iter_post_order(Bst *b, visit_fn fn) {
-  printf("NOT IMPLEMENTED: bst_iter_post_order");
+  Stack *s = stack_new();
+  Bst *last_visited_node = NULL;
+
+  while (!stack_is_empty(s) || b) {
+    if (b) {
+      stack_push(s, b);
+      b = b->left;
+    } else {
+      Bst *peek_node = stack_peek(s);
+      if (peek_node->right && (last_visited_node != peek_node->right)) {
+        b = peek_node->right;
+      } else {
+        fn(peek_node);
+        last_visited_node = stack_pop(s);
+      }
+    }
+  }
+
+  stack_free(s);
 }
