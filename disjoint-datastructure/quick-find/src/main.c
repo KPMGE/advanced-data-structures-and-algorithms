@@ -19,4 +19,6 @@ int main (int argc, char *argv[]) {
     }
     printf("%zu and %zu are already connected, skipping them...\n", elem1, elem2);
   } 
+
+  uf_free(uf);
 }
