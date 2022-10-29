@@ -39,3 +39,8 @@ void uf_union(Uf *uf, size_t elem1, size_t elem2) {
   // connected component of elem1 is child of connected component of elem2
   uf->ids[root1] = root2;
 }
+
+void uf_free(Uf *uf) {
+  free(uf->ids);
+  free(uf);
+}
