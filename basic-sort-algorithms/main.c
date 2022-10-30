@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
   array_read(array, array_size);
 
   clock_t start = clock();
-  sort(array, 0, array_size);
+  sort(array, 0, array_size - 1);
   clock_t end = clock();
   printf("time spent: %.3f", ((double)(end - start)) / CLOCKS_PER_SEC);
 
